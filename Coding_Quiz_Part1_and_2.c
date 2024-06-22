@@ -1,17 +1,10 @@
-//
-//  main.c
-//  part_1_2
-//
-//  Created by Tuyen Vo on 6/21/24.
-//
-
 #include <stdio.h>
 
 /* Function to swap two elements */
-void swap(int *first, int *second) {
-  int temp = *first;
-  *first = *second;
-  *second = temp;
+void swap(int *a, int *b) {
+  int temp = *a;
+  *a = *b;
+  *b = temp;
 }
 
 /* Partition function for quicksort */
@@ -32,25 +25,30 @@ int partition(int arr[], int low, int high) {
 
 /* Iterative quicksort function */
 void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        // pi is partitioning index, arr[p] is now at right place
-        int pi = partition(arr, low, high);
+  while (low < high) {
+    /* pi is partitioning index */
+    int pi = partition(arr, low, high);
 
-        // Recursively sort elements before and after partition
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
-      }
+    /* Recursively sort elements before and after partition */
+    if (pi - low < high - pi) {
+      quickSort(arr, low, pi - 1);
+      low = pi + 1;
+    } else {
+      quickSort(arr, pi + 1, high);
+      high = pi - 1;
+    }
+  }
 }
 
 /* Function to remove duplicates in-place */
-int removeDuplicates(int arr[], int size) {
-  if (size == 0 || size == 1) {
-    return size;
+int removeDuplicates(int arr[], int n) {
+  if (n == 0 || n == 1) {
+    return n;
   }
 
   int j = 0; /* index to store unique elements */
 
-  for (int i = 1; i < size; i++) {
+  for (int i = 1; i < n; i++) {
     if (arr[i] != arr[j]) {
       j++;
       arr[j] = arr[i]; /* in-place copy */
@@ -60,19 +58,19 @@ int removeDuplicates(int arr[], int size) {
   return j + 1; /* return the new length of the array */
 }
 
-int main(void) {
+int main() {
   int arr[] = {-1, 2, 2, 4, 1, 0, 3, 2, 5};
-  int size = sizeof(arr) / sizeof(arr[0]);
+  int n = sizeof(arr) / sizeof(arr[0]);
 
   /* Sort the array using quicksort */
-  quickSort(arr, 0, size - 1);
+  quickSort(arr, 0, n - 1);
 
   /* Remove duplicates and get the new length */
-  size = removeDuplicates(arr, size);
+  n = removeDuplicates(arr, n);
 
   /* Print the sorted and deduplicated array */
   printf("Sorted and deduplicated array: ");
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < n; i++) {
     printf("%d ", arr[i]);
   }
   printf("\n");
